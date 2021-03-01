@@ -193,7 +193,7 @@ def main_worker(
         dump_input = torch.rand(
             (1, 3, cfg.DATASET.INPUT_SIZE, cfg.DATASET.INPUT_SIZE)
         )
-        writer_dict['writer'].add_graph(model, (dump_input, ))
+        # writer_dict['writer'].add_graph(model, (dump_input, ))
         # logger.info(get_model_summary(model, dump_input, verbose=cfg.VERBOSE))
 
     if cfg.FP16.ENABLED:
@@ -224,8 +224,8 @@ def main_worker(
             # available GPUs if device_ids are not set
             model = torch.nn.parallel.DistributedDataParallel(model)
     elif args.gpu is not None:
-        torch.cuda.set_device(args.gpu)
-        model = model.cuda(args.gpu)
+        torch.cuda.device(f"cuda:{args.gpu}")
+        model = model.cuda(f"cuda:{args.gpu}")
     else:
         model = torch.nn.DataParallel(model).cuda()
 

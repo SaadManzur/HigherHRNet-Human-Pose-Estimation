@@ -44,6 +44,7 @@ class BasicBlock(nn.Module):
         self.stride = stride
 
     def forward(self, x):
+
         residual = x
 
         out = self.conv1(x)
@@ -195,7 +196,7 @@ class HighResolutionModule(nn.Module):
                         nn.BatchNorm2d(num_inchannels[i]),
                         nn.Upsample(scale_factor=2**(j-i), mode='nearest')))
                 elif j == i:
-                    fuse_layer.append(None)
+                    fuse_layer.append(nn.Identity())
                 else:
                     conv3x3s = []
                     for k in range(i-j):
